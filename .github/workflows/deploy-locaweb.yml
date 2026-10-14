@@ -1,0 +1,43 @@
+name: Publicar G na Locaweb
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FTP_SERVER: ${{ secrets.LOCAWEB_FTP_SERVER }}
+      FTP_USERNAME: ${{ secrets.LOCAWEB_FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.LOCAWEB_FTP_PASSWORD }}
+    steps:
+      - name: Obter código
+        uses: actions/checkout@v4
+      - name: Conferir credenciais
+        id: credenciais
+        shell: bash
+        run: |
+          if [[ -n "$FTP_SERVER" && -n "$FTP_USERNAME" && -n "$FTP_PASSWORD" ]]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Deploy não executado: configure LOCAWEB_FTP_SERVER, LOCAWEB_FTP_USERNAME e LOCAWEB_FTP_PASSWORD em Settings > Secrets and variables > Actions."
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Publicar site
+        if: steps.credenciais.outputs.configured == 'true'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.LOCAWEB_FTP_SERVER }}
+          username: ${{ secrets.LOCAWEB_FTP_USERNAME }}
+          password: ${{ secrets.LOCAWEB_FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./
+          server-dir: /public_html/selog/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            README.md
+            .github/**
