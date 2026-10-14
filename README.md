@@ -3,7 +3,7 @@
 Subsite institucional do programa privado e gratuito **G**, iniciativa do Grupo Eduarda Bispo.
 
 ## Endereço previsto
-`https://selog.grupoeduardabispo.com.br`
+`https://selog.compassrosesystems.com.br`
 
 O endereço depende de configuração de DNS, subdomínio e pasta na hospedagem Locaweb. Não presuma que esteja ativo apenas porque o código existe.
 
@@ -41,3 +41,7 @@ Implantar endpoint seguro e planilha privada, publicar política de privacidade 
 
 ## Registro de acionamento
 Em 14/10/2026 foi solicitado novo disparo do workflow por commit na branch `main`, após confirmação da direção de que o FTP já havia sido configurado. O resultado do deploy deve ser confirmado no histórico completo do GitHub Actions e na hospedagem.
+
+
+## Domínio definido em 14/10/2026
+A operação pública pretendida utiliza **selog.compassrosesystems.com.br**, com a Compass Rose Systems como infraestrutura tecnológica e o Grupo Eduarda Bispo identificado como idealizador/responsável institucional. O DNS, SSL e a publicação precisam de confirmação técnica. A mudança de domínio não altera o diretório FTPS `/public_html/selog/` até validação da raiz FTP.
