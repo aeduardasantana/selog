@@ -37,3 +37,7 @@ Implantar endpoint seguro e planilha privada, publicar política de privacidade 
 - [Arquitetura e decisão de subsite](https://docs.google.com/document/d/1beOllRsrVIGxEWKA2w8QoD9x7Y7L4LzWOjNsMKebGjo/edit)
 - [Manual preliminar de reconhecimento](https://docs.google.com/document/d/1wY8mvs25bQj3bZcpEa7IvihfEyyhhhyO1eXWYhRviMw/edit)
 - [Brandbook](https://docs.google.com/document/d/1qttTIRWhW240NsGMKCFPk2GTdBvBvdEAkglZm-KAiAM/edit)
+
+
+## Registro de acionamento
+Em 14/10/2026 foi solicitado novo disparo do workflow por commit na branch `main`, após confirmação da direção de que o FTP já havia sido configurado. O resultado do deploy deve ser confirmado no histórico completo do GitHub Actions e na hospedagem.
