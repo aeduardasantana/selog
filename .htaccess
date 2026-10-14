@@ -1,0 +1,3 @@
+# Aplicável a hospedagem Apache com AllowOverride habilitado.
+# Preserva respostas HTTP 404 e exibe a página personalizada.
+ErrorDocument 404 /404.html
