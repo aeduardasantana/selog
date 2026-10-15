@@ -124,6 +124,8 @@ function obterCartaCorporativa(protocolo,email){
  if(!sheet||sheet.getLastRow()<2)return {ok:false,mensagem:'Protocolo não localizado.'};
  const cell=sheet.getRange(2,1,sheet.getLastRow()-1,1).createTextFinder(id).matchEntireCell(true).findNext();
  if(!cell||clean_(sheet.getRange(cell.getRow(),8).getValue(),180).toLowerCase()!==correio)return {ok:false,mensagem:'Protocolo não localizado.'};
+ const dados=sheet.getRange(cell.getRow(),10,1,6).getDisplayValues()[0].map(v=>clean_(v,12).toLowerCase());
+ if(dados[5]!=='sim'||!dados.slice(0,5).includes('sim'))return {ok:false,mensagem:'A carta corporativa é disponibilizada para solicitações com práticas e evidências declaradas. Nossa equipe poderá orientar os próximos passos pelo canal institucional.'};
  const blob=DriveApp.getFileById(CONF.CARTA_CORPORATIVA_FILE_ID).getBlob();
  return {ok:true,nome:'Carta-Corporativa-Selo-G.png',mime:'image/png',base64:Utilities.base64Encode(blob.getBytes())};
 }
