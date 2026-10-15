@@ -4,6 +4,7 @@
  * Não habilita emissão automática: concessões exigem registro manual autorizado.
  */
 const CONF = Object.freeze({
+  CARTA_CORPORATIVA_FILE_ID: '192lnCGaxw4uDJow5E-Hbvcv1aQmg-df-',
   SPREADSHEET_ID: '', // obrigatório: ID da planilha privada (não a pasta pública)
   SHEET_APPLICATIONS: 'Solicitacoes',
   SHEET_AWARDS: 'Reconhecimentos',
@@ -19,7 +20,7 @@ function doGet(e) {
   const tpl=HtmlService.createTemplateFromFile('Main');
   tpl.mode=q.view==='validar'?'validar':'participar';
   tpl.prefill=String(q.codigo||'').slice(0,60);
-  return tpl.evaluate().setTitle('G — Programa de Reconhecimento em Gestão Psicossocial')
+  return tpl.evaluate().setTitle('Selo G — Reconhecimento em Gestão Psicossocial')
     .addMetaTag('viewport','width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DEFAULT);
 }
@@ -113,4 +114,16 @@ function registrarReconhecimento_(dados){
    clean_(dados.nivel,20).toUpperCase(),issued,expiration,'VIGENTE',clean_(dados.versaoRegulamento,60),
    safeCell_(dados.aprovadorInterno,120),new Date(),safeCell_(dados.observacoes,500)]);
  return {codigo:code,validade:formatted_(expiration)};}finally{lock.releaseLock();}
+}
+
+/** Entrega somente após protocolo registrado, validando e-mail associado. */
+function obterCartaCorporativa(protocolo,email){
+ const id=clean_(protocolo,90),correio=clean_(email,180).toLowerCase();
+ if(!/^GP-[0-9]{8}-[A-Z0-9]{16}$/.test(id)||!correio)return {ok:false,mensagem:'Identificação inválida.'};
+ const sheet=getSS_().getSheetByName(CONF.SHEET_APPLICATIONS);
+ if(!sheet||sheet.getLastRow()<2)return {ok:false,mensagem:'Protocolo não localizado.'};
+ const cell=sheet.getRange(2,1,sheet.getLastRow()-1,1).createTextFinder(id).matchEntireCell(true).findNext();
+ if(!cell||clean_(sheet.getRange(cell.getRow(),8).getValue(),180).toLowerCase()!==correio)return {ok:false,mensagem:'Protocolo não localizado.'};
+ const blob=DriveApp.getFileById(CONF.CARTA_CORPORATIVA_FILE_ID).getBlob();
+ return {ok:true,nome:'Carta-Corporativa-Selo-G.png',mime:'image/png',base64:Utilities.base64Encode(blob.getBytes())};
 }
