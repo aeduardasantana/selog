@@ -9,29 +9,31 @@ input[type=checkbox]{width:auto;transform:scale(1.15);margin:0 8px 0 0}
 fieldset{border:1px solid #50657a;border-radius:10px;padding:10px 16px}button{background:#dbb776;color:#122239;font-weight:750;border:0;border-radius:999px;padding:13px 23px;cursor:pointer}button:disabled{opacity:.5}
 .info{color:#c8d3de}.error{color:#ffc6b8}.success{color:#b2f3c7}.result{padding:20px;border:1px solid #8eafd0;border-radius:12px;margin:16px 0;word-wrap:break-word}
 small{color:#cfdae5}.checkline{display:flex;align-items:flex-start;gap:9px}.checkline span{font-weight:400}
-</style></head><body><main>
-<h1>G</h1><p>Reconhecimento em Gestão Psicossocial — uma iniciativa do Grupo Eduarda Bispo</p>
-<div class="note"><strong>Programa privado e gratuito.</strong> O preenchimento não equivale a diagnóstico NR-1 nem concede automaticamente reconhecimento. Prazo de validade dos reconhecimentos concedidos: seis meses.</div>
+.stage[hidden],button[hidden],form[hidden]{display:none!important}.stage{min-height:220px}</style></head><body><main>
+<h1>SELO G</h1><p>Reconhecimento em Gestão Psicossocial</p>
+<div class="note"><strong>Programa privado e gratuito.</strong> O preenchimento não equivale a diagnóstico NR-1 nem concede automaticamente reconhecimento. Validade: Bronze e Prata, seis meses; Ouro, doze meses.</div>
 <? if(mode==='validar'){ ?>
 <section><h2>Verificar reconhecimento</h2><form id="verifyForm"><label><span>Código de reconhecimento</span><input id="codigo" minlength="8" maxlength="70" required value="<?= prefill ?>" autocomplete="off"></label><button>Consultar validade</button></form><div id="verifyResult" role="status" aria-live="polite"></div></section>
 <? }else{ ?>
-<section><h2>Solicitar avaliação para reconhecimento G</h2><p class="info">Forneça somente dados corporativos, sem dados de saúde de trabalhadores. Documentos probatórios serão solicitados separadamente por canal seguro após análise de elegibilidade.</p>
+<section><h2>Triagem e requerimento do Selo G</h2><p class="info">Preencha as quatro etapas. Informe somente dados institucionais; não inclua dados de saúde dos trabalhadores.</p>
+<div class="note"><strong id="progressLabel">Etapa 1 de 4 — Organização</strong></div>
 <form id="application">
-<label><span>Organização *</span><input name="organizacao" maxlength="160" required></label>
-<label><span>País *</span><input name="pais" maxlength="80" required></label>
-<label><span>Setor de atividade</span><input name="setor" maxlength="100"></label>
-<label><span>Porte</span><select name="porte"><option value="">Não informado</option><option>1 a 9 pessoas</option><option>10 a 49 pessoas</option><option>50 a 249 pessoas</option><option>250 ou mais pessoas</option></select></label>
-<label><span>Responsável institucional *</span><input name="responsavel" maxlength="120" required></label>
-<label><span>E-mail corporativo *</span><input name="email" type="email" maxlength="180" required></label>
-<label><span>Telefone (opcional)</span><input name="telefone" maxlength="40"></label>
+<div class="stage" data-stage="0"><h2>Conhecer a organização</h2>
+<label><span>País *</span><select name="pais" required><option>Brasil</option><option>Portugal</option><option>Angola</option><option>Moçambique</option><option>Cabo Verde</option><option>Outro</option></select></label>
+<label><span>Pessoas na organização *</span><select name="porte" required><option value="">Selecione</option><option>1–9</option><option>10–49</option><option>50–99</option><option>100–499</option><option>500 ou mais</option></select></label>
+<label><span>Setor de atuação *</span><select name="setor" required><option value="">Selecione</option><option>Comércio</option><option>Indústria</option><option>Serviços</option><option>Saúde</option><option>Educação</option><option>Tecnologia</option><option>Transporte / Logística</option><option>Setor público</option><option>Outro</option></select></label>
+</div>
+<div class="stage" data-stage="1" hidden><h2>Práticas atuais</h2><p class="info">Considere iniciativas efetivamente realizadas. Respostas declaradas não substituem comprovação.</p><div id="questions"></div></div>
+<div class="stage" data-stage="2" hidden><h2>Sua devolutiva inicial</h2><div class="result"><strong id="prelimTitle"></strong><p id="prelimBody"></p></div><p class="info">Este resultado descritivo não concede Bronze, Prata ou Ouro. O reconhecimento depende de avaliação das evidências.</p></div>
+<div class="stage" data-stage="3" hidden><h2>Solicitar informações sobre o Selo G</h2>
+<label><span>Organização *</span><input name="organizacao" maxlength="160" required></label><label><span>Responsável institucional *</span><input name="responsavel" maxlength="120" required></label><label><span>E-mail corporativo *</span><input name="email" type="email" maxlength="180" required></label><label><span>Telefone (opcional)</span><input name="telefone" maxlength="40"></label>
 <div style="display:none" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>
-<div id="questions"></div>
-<label class="checkline"><input type="checkbox" name="interesseReconhecimento" required><span>Solicito voluntariamente análise preliminar de elegibilidade ao Programa G e compreendo que o formulário não concede selo. *</span></label>
-<label class="checkline"><input type="checkbox" name="cientePrivacidade" required><span>Li o aviso de privacidade e compreendo o tratamento dos dados informados para minha solicitação. *</span></label>
-<label class="checkline"><input type="checkbox" name="consentimentoComercial"><span>Autorizo separadamente contato sobre serviços comerciais do GEB Empresarial (opcional).</span></label>
-<p><small>Antes de habilitar candidaturas públicas, o responsável deverá substituir este aviso por uma política LGPD completa, com canal para exercício de direitos e informação sobre retenção e base legal.</small></p>
-<button type="submit">Registrar solicitação</button></form><div id="applicationResult" role="status" aria-live="polite"></div>
-</section>
+<label class="checkline"><input type="checkbox" name="interesseReconhecimento" required><span>Solicito voluntariamente informações e análise de elegibilidade para o Selo G. *</span></label>
+<label class="checkline"><input type="checkbox" name="cientePrivacidade" required><span>Estou ciente do tratamento dos dados institucionais informados para minha solicitação. *</span></label>
+<label class="checkline"><input type="checkbox" name="consentimentoComercial"><span>Autorizo separadamente contato para informações sobre serviços comerciais (opcional).</span></label>
+<p><small>Antes da ativação pública, é necessária política de privacidade completa, com identificação do controlador, canal para direitos e regras de retenção.</small></p></div>
+<div style="display:flex;gap:12px;justify-content:space-between;margin-top:22px"><button type="button" id="prevStage">Voltar</button><button type="button" id="nextStage">Continuar</button><button type="submit" id="sendStage" hidden>Enviar solicitação</button></div>
+</form><div id="applicationResult" role="status" aria-live="polite"></div></section>
 <? } ?>
 <p class="info">Contato: <a href="mailto:contato@compassrosesystems.com.br">contato@compassrosesystems.com.br</a> · <a href="https://selog.compassrosesystems.com.br/">Site institucional</a></p>
 </main>
@@ -42,19 +44,22 @@ if(mode==='validar'){
  google.script.run.withSuccessHandler(r=>{b.disabled=false;el.replaceChildren();const box=document.createElement('div');box.className='result';const h=document.createElement('h2');h.textContent=r.found?r.status:'Não localizado';box.append(h);const p=document.createElement('p');p.textContent=r.found?['Organização: '+r.organizacao,'Nível: '+r.nivel,'Escopo: '+r.escopo,'Emissão: '+r.emissao,'Validade: '+r.validade,'Código: '+r.codigo,'Regulamento: '+r.regulamento,r.natureza].join(' | '):r.message;box.append(p);el.append(box);}).withFailureHandler(err=>{b.disabled=false;el.textContent='Falha na consulta. Tente novamente mais tarde.';}).validateAward(document.getElementById('codigo').value);});
 }else{
  const prompts=[
- ['campanhas','A organização realizou campanhas ou palestras pontuais?'],
- ['diagnostico','Existe diagnóstico documentado dos fatores psicossociais relacionados ao trabalho?'],
- ['medidas','Existem medidas implementadas sobre condições e organização do trabalho?'],
- ['programa','Há programa contínuo de gestão psicossocial?'],
- ['monitoramento','Há monitoramento e revisão periódica das ações?'],
- ['evidencias','Há registros comprobatórios organizados?']
+ ['campanhas','Sua empresa realizou campanhas ou palestras de conscientização sobre saúde mental?','Ex.: ações sazonais devidamente documentadas.'],
+ ['diagnostico','Já realizou diagnóstico dos fatores de risco psicossociais relacionados ao trabalho?','Uma pesquisa de satisfação não equivale necessariamente a um diagnóstico técnico.'],
+ ['medidas','Foram executadas intervenções nas condições ou na organização do trabalho?','Ex.: ajustes de carga, jornada, apoio à liderança ou processos.'],
+ ['programa','Existe um programa contínuo de prevenção e gestão psicossocial?','Considere execução recorrente, não apenas um cronograma planejado.'],
+ ['monitoramento','A empresa acompanha indicadores e revê as medidas implementadas?','Ex.: revisões documentadas, indicadores e planos de melhoria.'],
+ ['evidencias','Há evidências documentais dessas iniciativas?','Registros, relatórios, planos e atas, sem dados clínicos individuais.']
  ];
- const cont=document.getElementById('questions');
- prompts.forEach(([k,label])=>{let f=document.createElement('fieldset');let legend=document.createElement('legend');legend.textContent=label;f.append(legend);let s=document.createElement('select');s.name=k;s.required=true;s.innerHTML='<option value="">Selecione</option><option value="sim">Sim</option><option value="nao">Não</option><option value="nao-sei">Não sei</option>';f.append(s);cont.append(f);});
- const form=document.getElementById('application');
- form.addEventListener('submit',e=>{e.preventDefault();const d=Object.fromEntries(new FormData(form).entries());['interesseReconhecimento','cientePrivacidade','consentimentoComercial'].forEach(k=>d[k]=form.elements[k].checked);
- const b=form.querySelector('button[type=submit]'),out=document.getElementById('applicationResult');b.disabled=true;out.textContent='Registrando solicitação...';
- google.script.run.withSuccessHandler(r=>{b.disabled=false;out.className='result success';out.textContent=r.mensagem+' Protocolo: '+r.protocolo;form.reset();}).withFailureHandler(err=>{b.disabled=false;out.className='result error';out.textContent='Não foi possível registrar a solicitação. Entre em contato com o programa.';}).submitApplication(d);
- });
+ const form=document.getElementById('application'),container=document.getElementById('questions');
+ prompts.forEach(([key,label,help])=>{const field=document.createElement('fieldset'),legend=document.createElement('legend');legend.textContent=label;field.append(legend);const p=document.createElement('p');p.textContent=help;p.className='info';field.append(p);const select=document.createElement('select');select.name=key;select.required=true;select.innerHTML='<option value="">Selecione</option><option value="sim">Sim</option><option value="nao">Não</option><option value="nao-sei">Não sei</option>';field.append(select);container.append(field)});
+ const stages=[...form.querySelectorAll('.stage')];let step=0;const labels=['Organização','Práticas','Devolutiva','Contato institucional'];
+ function preliminary(){const d=Object.fromEntries(new FormData(form).entries());let title,body;if(d.diagnostico==='sim'&&d.programa==='sim'&&d.monitoramento==='sim'){title='Gestão contínua relatada';body='As respostas indicam programa e acompanhamento. Para eventual reconhecimento, será necessária comprovação da execução, escopo, medidas e resultados monitorados.';}else if(d.diagnostico==='sim'){title='Diagnóstico relatado';body='Você informou a existência de diagnóstico. Uma avaliação documental independente poderá examinar sua metodologia, abrangência e data.';}else if(d.campanhas==='sim'){title='Ações pontuais relatadas';body='As campanhas e palestras são iniciativas registráveis, mas não demonstram, isoladamente, gestão efetiva dos riscos psicossociais.';}else{title='Práticas ainda não identificadas nesta triagem';body='Há oportunidade de mapear condições de trabalho, documentar medidas de prevenção e estruturar práticas antes de solicitar reconhecimento.';}document.getElementById('prelimTitle').textContent=title;document.getElementById('prelimBody').textContent=body;}
+ function showStage(){stages.forEach((node,i)=>node.hidden=i!==step);document.getElementById('progressLabel').textContent='Etapa '+(step+1)+' de 4 — '+labels[step];document.getElementById('prevStage').hidden=step===0;document.getElementById('nextStage').hidden=step===3;document.getElementById('sendStage').hidden=step!==3;if(step===2)preliminary();}
+ function checkStage(){const controls=[...stages[step].querySelectorAll('input[required],select[required]')];for(const el of controls){if(!el.reportValidity())return false;}return true;}
+ document.getElementById('prevStage').onclick=()=>{if(step>0){step--;showStage();}};
+ document.getElementById('nextStage').onclick=()=>{if(!checkStage())return;if(step<3){step++;showStage();}};
+ form.addEventListener('submit',e=>{e.preventDefault();if(!checkStage())return;const d=Object.fromEntries(new FormData(form).entries());['interesseReconhecimento','cientePrivacidade','consentimentoComercial'].forEach(k=>d[k]=form.elements[k].checked);const b=document.getElementById('sendStage'),out=document.getElementById('applicationResult');b.disabled=true;out.textContent='Registrando solicitação...';google.script.run.withSuccessHandler(r=>{out.className='result success';out.replaceChildren();const msg=document.createElement('p');msg.textContent=r.mensagem+' Protocolo: '+r.protocolo;out.append(msg);const download=document.createElement('button');download.type='button';download.textContent='Baixar carta corporativa';download.onclick=()=>{download.disabled=true;download.textContent='Preparando carta...';google.script.run.withSuccessHandler(file=>{download.disabled=false;download.textContent='Baixar carta corporativa';if(!file.ok){alert(file.mensagem);return;}const raw=atob(file.base64),bytes=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);const url=URL.createObjectURL(new Blob([bytes],{type:file.mime}));const link=document.createElement('a');link.href=url;link.download=file.nome;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);}).withFailureHandler(()=>{download.disabled=false;download.textContent='Baixar carta corporativa';alert('Não foi possível obter a carta. Entre em contato pelo e-mail institucional.');}).obterCartaCorporativa(r.protocolo,d.email);};out.append(download);form.hidden=true;}).withFailureHandler(()=>{b.disabled=false;out.className='result error';out.textContent='Não foi possível registrar a solicitação. Entre em contato com o Selo G.';}).submitApplication(d);});
+ showStage();
 }
 </script></body></html>
