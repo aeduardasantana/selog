@@ -8,7 +8,7 @@ const CONF = Object.freeze({
   SHEET_APPLICATIONS: 'Solicitacoes',
   SHEET_AWARDS: 'Reconhecimentos',
   CONTACT_EMAIL: 'contato@compassrosesystems.com.br',
-  VALID_MONTHS: 6,
+  VALID_MONTHS: Object.freeze({BRONZE:6,PRATA:6,OURO:12}),
   TIMEZONE: 'America/Sao_Paulo',
   ORIGIN_SITE: 'https://selog.compassrosesystems.com.br'
 });
@@ -62,9 +62,11 @@ function submitApplication(obj){
   }finally{lock.releaseLock();}
 }
 function parseDate_(v){if(v instanceof Date && !Number.isNaN(v.getTime()))return new Date(v);const d=new Date(v);return Number.isNaN(d.getTime())?null:d;}
-function sixMonths_(date){
+function expiryByLevel_(date,level){
+ const months=CONF.VALID_MONTHS[clean_(level,20).toUpperCase()];
+ if(!months)throw Error('Nível inválido para cálculo da validade.');
  const d=new Date(date.getTime());const day=d.getDate();
- d.setDate(1);d.setMonth(d.getMonth()+CONF.VALID_MONTHS);
+ d.setDate(1);d.setMonth(d.getMonth()+months);
  const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
  d.setDate(Math.min(day,last));return d;
 }
@@ -77,9 +79,11 @@ function validateAward(code){
  if(!found)return {found:false,message:'Código não localizado.'};
  const row=sh.getRange(found.getRow(),1,1,AWARD_COLS.length).getValues()[0];
  const issued=parseDate_(row[5]);if(!issued)return {found:false,message:'Registro sem data de emissão válida.'};
- const expiration=parseDate_(row[6])||sixMonths_(issued);
+ const level=clean_(row[4],20).toUpperCase();
+ if(!CONF.VALID_MONTHS[level])return {found:false,message:'Nível de reconhecimento inválido.'};
+ const expiration=parseDate_(row[6])||expiryByLevel_(issued,level);
  // O vencimento é calculado obrigatoriamente a partir da data de concessão.
- const expected=sixMonths_(issued);
+ const expected=expiryByLevel_(issued,level);
  if(formatted_(expiration)!==formatted_(expected))return {found:false,message:'Registro requer revisão administrativa da validade.'};
  const state=clean_(row[7],50).toLowerCase();
  let status='INDETERMINADO';
@@ -101,7 +105,7 @@ function registrarReconhecimento_(dados){
  const approved=['BRONZE','PRATA','OURO'];
  if(!dados||!approved.includes(clean_(dados.nivel,20).toUpperCase()))throw Error('Nível inválido');
  if(!dados.aprovadorInterno||!dados.versaoRegulamento)throw Error('Exigidos aprovador e versão do regulamento.');
- const issued=new Date(),expiration=sixMonths_(issued);
+ const issued=new Date(),expiration=expiryByLevel_(issued,dados.nivel);
  const code='G-'+Utilities.formatDate(issued,CONF.TIMEZONE,'yyyy')+'-'+token_();
  const lock=LockService.getScriptLock();lock.waitLock(15000);
  try{const sh=ensureSheet_(getSS_(),CONF.SHEET_AWARDS,AWARD_COLS);
